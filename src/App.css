@@ -310,3 +310,8 @@ stroke-dashoffset:410;
 .tableCell{
   border: 1px solid green;
 }
+
+.canvasWrapper{
+  width: 100%;
+  padding-left: 20px;
+}

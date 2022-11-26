@@ -7,7 +7,7 @@ const Lab2 = ({generatedArr, setGeneratedArr}) => {
     const [result, setResult] = useState(null)
 
     const task1 = () => {
-        const numbers = generateArrayOfNumbers(100, false, 97, 142)
+        const numbers = generateArrayOfNumbers(100, false, 18, 80)
         const sortedNumbers = [...numbers].sort((a, b) => {
             if(a > b)
                 return 1
@@ -379,7 +379,7 @@ const Lab2 = ({generatedArr, setGeneratedArr}) => {
         зваженого, дисперсії, асиметрії і ексцесу (за потреби)) вибірки.`,
         tasks: [
             {
-                text: 'Для вибірки знайти розмах (R = Xmax - Xmin) кількість інтервалів (m = 1 + 3.3221 * lgn) та кількість інтервалів k = (Xmax - Xmin) / (1 + 3.3221 * lgn).',
+                text: 'Для вибірки знайти розмах (R = Xmax - Xmin) кількість інтервалів (m = 1 + 3.3221 * lgn) та ширину інтервалів k = (Xmax - Xmin) / (1 + 3.3221 * lgn).',
                 func: task1
             },
             {

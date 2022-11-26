@@ -3,24 +3,34 @@ import Template from "../Template/Template";
 import generated from '../../generated.json'
 import { generateArrayOfNumbers } from "../../utils/utils";
 
-const Lab1 = () => {
+const Lab1 = ({isReal}) => {
 
     const [result, setResult] = useState(null)
 
     const sortData = (data) => {
         return [...data].sort((a, b) => {
-            if(a.age < b.age)
+            if(a?.age){
+                if(a.age < b.age)
                 return -1
-            if(a.age > b.age)
-                return 1
-            return 0
+                if(a.age > b.age)
+                    return 1
+                return 0
+            }
+            else{
+                if(a < b)
+                return -1
+                if(a > b)
+                    return 1
+                return 0
+            }   
         })
     }
 
     const task1 = () => {
+        const formatedData = isReal ? generated.slice(0, 100) : generated.slice(0, 100).map(el => el.age)
         const data = {
             types: ['array'],
-            data: generated.slice(0, 100)
+            data: formatedData
         }
         setResult(data)
     }
@@ -38,8 +48,8 @@ const Lab1 = () => {
     const task3 = () => {
         if(result){
             const sortedData = sortData(result.data)
-            const maxAge = sortedData[sortedData.length - 1].age
-            const minAge = sortedData[0].age
+            const maxAge = sortedData[sortedData.length - 1]?.age || sortedData[sortedData.length - 1]
+            const minAge = sortedData[0]?.age || sortedData[0]
             const data = {
                 types: ['string'],
                 data: `Розмах вибірки по віку: ${maxAge - minAge}`

@@ -13,6 +13,7 @@ import {
     BarController
 } from 'chart.js';
 import { Line, Bar } from 'react-chartjs-2';
+import CustomChart from '../../utils/customChart'
 
 ChartJS.register(
     CategoryScale,
@@ -182,6 +183,10 @@ const Template = ({ labDescription, result }) => {
                                         renderBarChart(result?.chart.data) :
                                         type === 'table' ?
                                         renderTable(result.data) :
+                                        type === 'custom' ? 
+                                        result?.customComponent : 
+                                        type === 'additionalString' ? 
+                                        result?.additionalData : 
                                         null
                                     )
                                 })

@@ -33,7 +33,7 @@ function randn_bm_limited(min, max, skew) {
 export const generateArrayOfNumbers = (number, isNormal, min, max) => {
     const numbers = []
     for(let i = 0; i < number; i++) {
-        numbers.push(isNormal ? Math.round(randn_bm() * 10) / 10 : Math.round(randn_bm_limited(min, max, 1) * 10) / 10)
+        numbers.push(isNormal ? Math.round(randn_bm() * 10) / 10 : Math.round(randn_bm_limited(min, max, 1)))
     }
     return numbers
 }
