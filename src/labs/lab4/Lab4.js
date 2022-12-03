@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Template from "../Template/Template";
 import generated from '../../generated.json'
-import { generateArrayOfNumbers, makeTableData, determinant } from "../../utils/utils";
+import { generateArrayOfNumbers, makeTableData, determinant, getLaplasValue } from "../../utils/utils";
 import CustomChart from "../../utils/customChart";
 
+const a0 = 49
+const a1 = 48
 
 const Lab4 = ({generatedArr, setGeneratedArr}) => {
 
@@ -11,10 +13,10 @@ const Lab4 = ({generatedArr, setGeneratedArr}) => {
     const task1 = () => {
         const ft = 0.95
         const gama = 1.96
-        const xV = generatedArr.reduce(
+        const xV = Math.round((generatedArr.reduce(
             (previousValue, currentValue) => previousValue + currentValue,
             0
-        ) / 100
+        ) / 100) * 100) / 100
         const subS = generatedArr.map(num => Math.round(Math.pow((num - xV), 2) * 100) / 100)
         const S = Math.round((subS.reduce(
             (previousValue, currentValue) => previousValue + currentValue,
@@ -50,8 +52,8 @@ ${conclusion2}
     const task2 = () => {
         const text = 
 `Сформуємо нульову та альтернативну гіпотези:
-H₀: а = а₀ = 49
-H₁: а = а₁ = 48.`
+H₀: а = а₀ = ${a0}
+H₁: а = а₁ = ${a1}.`
         const data = {
             types: ['string'],
             data: text
@@ -70,13 +72,15 @@ H₁: а = а₁ = 48.`
             0
         ) / 100) * 100) / 100
         const sigma = Math.round(Math.sqrt(S/100) * 100) / 100
+        const vidhilennia = Math.round(Math.sqrt(S) * 100) / 100
         const text = 
 `Так як а₀ > а₁, то критична область буде лівосторонньою.
 Критичне значення: Ф(u) = (1 - 2 * α) / 2 = (1 - 2 * 0.05) / 2 = ${(1 - 2 * 0.05) / 2}
 Знаходимо аргумент u: u = 1.64,
 отже критична область буде наступною:
 `
-    const uSpost = Math.round(((xV - 49) * 10) / sigma * 100) / 100
+    const uSpost = Math.round(((xV - a0) * 10) / vidhilennia * 100) / 100
+    
     let checking = ''
     if(uSpost < -1.64){
         checking = `На рівні значущості 0.05 нульову гіпотезу не приймаємо`
@@ -84,12 +88,14 @@ H₁: а = а₁ = 48.`
     else {
         checking = `На рівні значущості 0.05 нульову гіпотезу приймаємо`
     }
-    const criteriaPower = ((Math.round((uSpost - 1.64) * 100) / 100) > 0 ? 0.5 : -0.5) + 0.5
+    const powerLaplas = Math.abs(a1 - a0) / vidhilennia * 10 - 1.64
+    const criteriaPower = getLaplasValue(powerLaplas) + 0.5
         const additionalText = 
 `Знайдемо спостережуване значення критерію: 
-u = (Xв - а₀)√n / σ = (${xV} - ${49}) √100 / ${sigma} = ${uSpost}
+u = (Xв - а₀)√n / σ = (${xV} - ${a0}) √100 / ${vidhilennia} = ${uSpost}
 ${checking}
 Потужність критерію: 1 - β = ${criteriaPower}
+Отже, ймовірність не допустити помилку другого роду дорівнює ${criteriaPower}
 `
         const data = {
             types: ['string', 'custom', 'additionalString'],
@@ -101,8 +107,22 @@ ${checking}
     }
 
     const task4 = () => {
+        const xV = generatedArr.reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+        ) / 100
+        const subS = generatedArr.map(num => Math.round(Math.pow((num - xV), 2) * 100) / 100)
+        const S = Math.round((subS.reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+        ) / 100) * 100) / 100
+        const vidhilennia = Math.round(Math.sqrt(S) * 100) / 100
+        const powerLaplas = Math.abs(a1 - a0) / vidhilennia * 10 - 1.64
+        const criteriaPower = getLaplasValue(powerLaplas) + 0.5
+        const value = (Math.pow((1.64 + getLaplasValue((1 - 2 * criteriaPower) / 2)), 2) * S) / (Math.pow((a1 - a0), 2))
         const text = 
 `n = (t1-2α + t1-2β)^2 * σ² / (а₁ - а₀)^2
+n = (1.64 + ${getLaplasValue((1 - 2 * criteriaPower) / 2)})^2 * ${S} / (${a1 - a0})^2 = ${Math.round(value)}
 `
         const data = {
             types: ['string'],

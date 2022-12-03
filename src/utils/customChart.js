@@ -5,7 +5,7 @@ const CustomChart = () => {
     const canvasRef = useRef(null)
     const draw = (ctx) => {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.strokeStyle = "green";
+        ctx.strokeStyle = "white";
         //line
         ctx.beginPath();
         ctx.moveTo(0,50);

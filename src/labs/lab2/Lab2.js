@@ -54,7 +54,7 @@ const Lab2 = ({generatedArr, setGeneratedArr}) => {
                     {
                         label: 'Полігон',
                         data: tableData.subFrequency,
-                        borderColor: 'rgb(0, 128, 0)',
+                        borderColor: 'rgb(255, 255, 255)',
                         backgroundColor: 'rgb(0, 0, 0)'
                     }
                 ]
@@ -62,14 +62,14 @@ const Lab2 = ({generatedArr, setGeneratedArr}) => {
             options: {
                 scales: {
                     xAxis: {
-                        grid: { borderColor: 'rgb(0, 128, 0)' },
+                        grid: { borderColor: 'rgb(121, 121, 121)' },
                         title: {
                             display: true,
                             text: 'Xi'
                         },
                     },
                     yAxis: {
-                        grid: { borderColor: 'rgb(0, 128, 0)' },
+                        grid: { borderColor: 'rgb(121, 121, 121)' },
                         title: {
                             display: true,
                             text: 'W'
@@ -88,8 +88,8 @@ const Lab2 = ({generatedArr, setGeneratedArr}) => {
                     {
                         label: 'Гістограма',
                         data: tableData.frequency,
-                        backgroundColor: 'rgba(0, 128, 0,  0.5)',
-                        borderColor: 'rgb(0, 128, 0)',
+                        backgroundColor: 'rgba(255, 255, 255,  0.5)',
+                        borderColor: 'rgb(255, 255, 255)',
                         borderWidth: 1,
                         categoryPercentage: 0.9,
                         barPercentage: 0.9
@@ -99,14 +99,14 @@ const Lab2 = ({generatedArr, setGeneratedArr}) => {
             options: {
                 scales: {
                     xAxis: {
-                        grid: { borderColor: 'rgb(0, 128, 0)' },
+                        grid: { borderColor: 'rgb(255, 255, 255)' },
                         title: {
                             display: true,
                             text: 'Xi'
                         },
                     },
                     yAxis: {
-                        grid: { borderColor: 'rgb(0, 128, 0)' },
+                        grid: { borderColor: 'rgb(255, 255, 255)' },
                         title: {
                             display: true,
                             text: 'W'
@@ -125,7 +125,7 @@ const Lab2 = ({generatedArr, setGeneratedArr}) => {
                     {
                         label: 'Полігон',
                         data: [0, ...tableData.collectedSubFrequency],
-                        borderColor: 'rgb(0, 128, 0)',
+                        borderColor: 'rgb(255, 255, 255)',
                         backgroundColor: 'rgb(0, 0, 0)'
                     }
                 ]
@@ -133,14 +133,14 @@ const Lab2 = ({generatedArr, setGeneratedArr}) => {
             options: {
                 scales: {
                     xAxis: {
-                        grid: { borderColor: 'rgb(0, 128, 0)' },
+                        grid: { borderColor: 'rgb(121, 121, 121)' },
                         title: {
                             display: true,
                             text: 'Xi'
                         },
                     },
                     yAxis: {
-                        grid: { borderColor: 'rgb(0, 128, 0)' },
+                        grid: { borderColor: 'rgb(121, 121, 121)' },
                         title: {
                             display: true,
                             text: 'W'
