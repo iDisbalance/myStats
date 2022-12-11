@@ -4,6 +4,7 @@ import Lab1 from './labs/lab1/Lab1';
 import Lab2 from './labs/lab2/Lab2';
 import Lab3 from './labs/lab3/Lab3';
 import Lab4 from './labs/lab4/Lab4';
+import Lab5 from './labs/lab5/Lab5';
 
 function App() {
   const [generatedArr, setGeneratedArr] = useState([])
@@ -39,6 +40,7 @@ function App() {
           <Lab2 generatedArr={generatedArr} setGeneratedArr={setGeneratedArr} />
           <Lab3 generatedArr={generatedArr} setGeneratedArr={setGeneratedArr} />
           <Lab4 generatedArr={generatedArr} setGeneratedArr={setGeneratedArr} />
+          <Lab5 generatedArr={generatedArr} setGeneratedArr={setGeneratedArr} />
         </div>
       </main>
     </div>

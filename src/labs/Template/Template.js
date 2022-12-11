@@ -27,6 +27,93 @@ ChartJS.register(
     Legend
 );
 
+const renderAdvancedTable = (data) => {
+    return (
+        <table className="table advanced">
+            <tr className="tableRow">
+                <td className="tableCell" rowspan="3">
+                    Вік<br/>
+                    працівників<br/>
+                    державного<br/>
+                    реєстру ФОП,<br/>
+                    років
+                </td>
+                <td className="tableCell" rowspan="2">
+                    Середини<br/>
+                    інтервалів
+                </td>
+                <td className="tableCell" colspan="8">
+                    Заробітня плата працівників тис. грн
+                </td>
+                <td className="tableCell" rowspan="3">
+                    Всього
+                </td>
+                <td className="tableCell" rowspan="3">
+                    Групове<br/>
+                    середнє,<br/>
+                    років
+                </td>
+            </tr>
+            <tr className="tableRow">
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+            </tr>
+            <tr className="tableRow">
+                <td className="tableCell">
+                    х/у
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+                <td className="tableCell">
+                    12
+                </td>
+            </tr>
+            {data}
+        </table>
+    )
+}
+
 const renderTable = (data) => {
     return (
         <table className="table">
@@ -182,11 +269,13 @@ const Template = ({ labDescription, result }) => {
                                         type === 'bar' ?
                                         renderBarChart(result?.chart.data) :
                                         type === 'table' ?
-                                        renderTable(result.data) :
+                                        renderTable(result?.data) :
                                         type === 'custom' ? 
                                         result?.customComponent : 
                                         type === 'additionalString' ? 
                                         result?.additionalData : 
+                                        type === 'advancedTable' ? 
+                                        renderAdvancedTable(result?.data) :
                                         null
                                     )
                                 })
