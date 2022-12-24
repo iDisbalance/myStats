@@ -55,61 +55,91 @@ const renderAdvancedTable = (data) => {
                 </td>
             </tr>
             <tr className="tableRow">
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
+                {
+                    data.yIntervals.map(interval => {
+                        return (
+                            <td className="tableCell">
+                                {interval}
+                            </td>
+                        )
+                    })
+                }
             </tr>
             <tr className="tableRow">
                 <td className="tableCell">
-                    х/у
+                    x/y
                 </td>
-                <td className="tableCell">
-                    12
+                {
+                    data.yMiddles.map(middle => {
+                        return (
+                            <td className="tableCell">
+                                {middle}
+                            </td>
+                        )
+                    })
+                }
+            </tr>
+            {data.rows.map(row => {
+                return (
+                    <tr className="tableRow">
+                        <td className="tableCell">
+                            {row.interval}
+                        </td>
+                        <td className="tableCell">
+                            {row.middle}
+                        </td>
+                        {
+                            row.values.map(val => {
+                                return (
+                                    <td className="tableCell">
+                                        {val || '-'}
+                                    </td>
+                                )
+                            })
+                        }
+                        <td className="tableCell">
+                            {row.sum}
+                        </td>
+                        <td className="tableCell">
+                            {row.groupMiddles}
+                        </td>
+                    </tr>
+                )
+            })}
+            <tr className="tableRow">
+                <td className="tableCell" colspan="2">
+                    Всього
                 </td>
+                {
+                    data.yValues.map(value => {
+                        return (
+                            <td className="tableCell">
+                                {value}
+                            </td>
+                        )
+                    })
+                }
                 <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
-                </td>
-                <td className="tableCell">
-                    12
+                    100
                 </td>
             </tr>
-            {data}
+            <tr className="tableRow">
+                <td className="tableCell" colspan="2">
+                    Групове середнє
+                </td>
+                {
+                    data.xGroupMiddles.map(value => {
+                        return (
+                            <td className="tableCell">
+                                {value}
+                            </td>
+                        )
+                    })
+                }
+                <td className="tableCell">
+                    -
+                </td>
+            </tr>
         </table>
     )
 }

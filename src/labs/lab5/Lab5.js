@@ -395,7 +395,7 @@ const Lab5 = ({generatedArr, setGeneratedArr}) => {
         let frequencyCopy = frequency
         const result = []
         const devidedNumber = getRundomNumber(1, limit)
-        while(result.length !== devidedNumber - 1 || 1){
+        while(result.length !== devidedNumber - 1){
             let tmp = getRundomNumber(1, frequencyCopy)
             if(tmp === 0)
                 continue
@@ -412,7 +412,7 @@ const Lab5 = ({generatedArr, setGeneratedArr}) => {
 
     const formArrRow = (number, arr) => {
         let helpArr = []
-        for(let i = 0; i < number; i++){
+        for(let i = 0; i < number - 1; i++){
             helpArr.push(null)
         }
         helpArr.push(...arr)
@@ -428,24 +428,52 @@ const Lab5 = ({generatedArr, setGeneratedArr}) => {
         const secondArr = makeTableData(sortData(secondArray))
         tableData.xIntervals = firstArr.intervals
         tableData.xMiddles = firstArr.intervalMiddles
-        tableData.yIntervals = secondArr.intervals
-        tableData.yMiddles = secondArr.intervalMiddles
+        tableData.yIntervals = secondArr.intervals.slice(0, 8)
+        tableData.yMiddles = secondArr.intervalMiddles.slice(0, 8)
         const frequencies = []
         firstArr.frequency.forEach((fr, id) => {
             const frequencyCol = devideFrequency(fr, 8 - id)
             frequencies.push(frequencyCol)
         })
+        const yValues = [...tableData.yMiddles]
+        const xGroupMiddles = [...tableData.yMiddles]
+        yValues.fill(0) 
+        xGroupMiddles.fill(0) 
+        const groupMiddles = []
+        for(let i = 0; i < frequencies.length; i++){
+            let middle = 0
+            for(let j = 0; j < frequencies[i].length; j++){
+                if(frequencies[i][j]){
+                    middle += frequencies[i][j] * tableData.yMiddles[j]
+                }
+            }
+            groupMiddles.push(middle)
+        }
         const rows = []
         tableData.xIntervals.forEach((interval, id) => {
+            frequencies[id] = formArrRow(id, frequencies[id])
+            for(let j = 0; j < frequencies[id].length; j++){
+                if(frequencies[id][j]){
+                    yValues[j] += frequencies[id][j]
+                    xGroupMiddles[j] += frequencies[id][j] * tableData.xMiddles[id]
+                }
+            }
             rows.push({
                 interval,
                 middle: tableData.xMiddles[id],
-                values: formArrRow(id, frequencies[id]),
-                sum: firstArr.frequency[id]
+                values: frequencies[id],
+                sum: firstArr.frequency[id],
+                groupMiddles: Math.round((groupMiddles[id] / firstArr.frequency[id]) * 100) / 100
             })
         })
+        tableData.yValues = yValues
+        tableData.xGroupMiddles = xGroupMiddles.map((el, id) => {
+            if(yValues[id])
+                return Math.round((el / yValues[id]) * 100) / 100
+            return '-'
+        })
+        //console.log(xGroupMiddles)
         tableData.rows = rows
-        console.log(tableData)
         const data = {
             types: ['advancedTable'],
             data: tableData
@@ -454,7 +482,12 @@ const Lab5 = ({generatedArr, setGeneratedArr}) => {
     }
 
     const task12 = () => {
-
+        const answer = 'Обчислимо всі необхідні суми:'
+        const data = {
+            types: ['string'],
+            data: answer
+        }
+        setResult(data)
     }
 
     const task13 = () => {

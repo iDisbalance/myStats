@@ -35,9 +35,9 @@ const Lab4 = ({generatedArr, setGeneratedArr}) => {
         const finalLeft = Math.round((100 / x2 * S) * 10) / 10
         const finalRight = Math.round((100 / x1 * S) * 10) / 10
 
-        const conclusion = `Таким чином, з надійністю ${ft} середній вік людей знаходиться в межах від ${xV - delta} до ${xV + delta} років`
+        const conclusion = `Таким чином, з надійністю ${ft} середній вік людей знаходиться в межах від ${Math.round((xV - delta) * 100) / 100} до ${Math.round((xV + delta) * 100) / 100} років`
         const conclusion2 = `Отже, з надійністю ${ft} дисперсія знаходиться в межах від ${finalLeft} до ${finalRight}`
-        const interval = `${xV - delta} <= X₀ <= ${xV + delta}
+        const interval = `${Math.round((xV - delta) * 100) / 100} <= X₀ <= ${Math.round((xV + delta) * 100) / 100}
 ${conclusion}
 ${finalLeft} <= σ² <= ${finalRight}
 ${conclusion2}
