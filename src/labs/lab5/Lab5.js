@@ -4,6 +4,22 @@ import generated from '../../generated.json'
 import { generateArrayOfNumbers, makeTableData, determinant, getLaplasValue, getBaseLog, getRundomNumber } from "../../utils/utils";
 import CustomChart from "../../utils/customChart";
 
+let xn = 0,
+x2n = 0,
+yn = 0,
+y2n = 0,
+xyn = 0,
+Хmid = 0,
+Ymid = 0,
+S2x = 0,
+S2y = 0,
+miu = 0,
+byx = 0,
+bxy = 0,
+deltaY = 0,
+deltaX = 0,
+koef = 0
+
 const Lab5 = ({generatedArr, setGeneratedArr}) => {
 
     const [result, setResult] = useState(null)
@@ -482,7 +498,85 @@ const Lab5 = ({generatedArr, setGeneratedArr}) => {
     }
 
     const task12 = () => {
-        const answer = 'Обчислимо всі необхідні суми:'
+        xn = result.data.rows.map(el => {
+            return el.middle * el.sum
+        }).reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+        );
+        x2n = result.data.rows.map(el => {
+            return el.middle ** 2 * el.sum
+        }).reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+        );
+        yn = result.data.yMiddles.map((el, id) => {
+            return el * result.data.yValues[id]
+        }).reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+        );
+        y2n = result.data.yMiddles.map((el, id) => {
+            return el ** 2 * result.data.yValues[id]
+        }).reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+        );
+        xyn = result.data.rows.map(row => {
+            return row.values.map((value, id) => {
+                return value ? value * result.data.yMiddles[id] * row.middle : 0
+            }).reduce(
+                (previousValue, currentValue) => previousValue + currentValue,
+                0
+            );
+        }).reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+        );
+
+        Хmid = xn / 100
+        Ymid = yn / 100
+        S2x = Math.round((x2n / 100 - Хmid ** 2) * 100) / 100
+        S2y = Math.round((y2n / 100 - Ymid ** 2) * 100) / 100
+        miu = Math.round((xyn / 100 - Хmid * Ymid) * 100) / 100
+        byx = Math.round((miu / S2x) * 100) / 100
+        bxy = Math.round((miu / S2y) * 100) / 100
+
+        deltaY = Math.round((Ymid - byx * Хmid) * 100) / 100
+        deltaX = Math.round((Хmid - bxy * Ymid) * 100) / 100
+
+        koef = Math.round((Math.sqrt(Math.abs(byx) * Math.abs(bxy))) * 100) / 100
+
+        const answer = `Обчислимо всі необхідні суми:
+
+Sum(Xi * Ni) = ${xn};
+Sum(Xi^2 * Ni) = ${x2n};
+Sum(Yj * Nj) = ${yn};
+Sum(Yj^2 * Nj) = ${y2n};
+Sum(Xi * Yj * Nij) = ${xyn};
+
+Знаходимо вибіркові характеристики і параметри рівняння регресії:
+
+Хсер = ${Хmid} (тис. грн);
+Yсер = ${Ymid} (років);
+S^2x = ${S2x};
+S^2y = ${S2y};
+μ = ${miu};
+byx = ${byx};
+bxy = ${bxy};
+
+Рівняння регресії:
+
+Yx - ${Ymid} = ${byx}(x - ${Хmid});
+Yx = ${byx}x ${deltaY > 0 ? `+ ${deltaY}` : `${deltaY}`};
+
+Xy - ${Хmid} = ${bxy}(x - ${Ymid});
+Xy = ${bxy}x ${deltaX > 0 ? `+ ${deltaX}` : `${deltaX}`};
+
+Коефіцієнт кореляції:
+
+r = ${koef}
+`
         const data = {
             types: ['string'],
             data: answer
@@ -491,11 +585,38 @@ const Lab5 = ({generatedArr, setGeneratedArr}) => {
     }
 
     const task13 = () => {
+        const t = Math.round((koef * Math.sqrt(98)/Math.sqrt(1 - koef ** 2)) * 100) / 100
+        const answer = `Перевірка значущості на рівні α = 0,05
+t = ${t}
 
+Знайдемо критичне значення 
+t0.95, 98 = 1.99
+
+Так як t > t0.95, 98, то коефіцієнт кореляції між X, Y значно відмінний від нуля.
+`
+        const data = {
+            types: ['string'],
+            data: answer
+        }
+        setResult(data)
     }
 
     const task14 = () => {
+        const z = Math.round((0.5 * Math.log((1 + koef) / (1 - koef))) * 100) / 100
+        const mLeft = Math.round((z - 1.96/Math.sqrt(98)) * 100) / 100
+        const mRight = Math.round((z + 1.96/Math.sqrt(98)) * 100) / 100
+        const answer = `Знайдемо інтервальні оцінки
+z = 0.5 * ln((1 + ${koef}) / (1 - ${koef})) = ${z}
 
+При Ф(t1-α) = 0.95
+t0.05 = 1.96
+${mLeft} <= M(z) <= ${mRight}
+`
+        const data = {
+            types: ['string'],
+            data: answer
+        }
+        setResult(data)
     }
 
     const task15 = () => {
