@@ -24,6 +24,7 @@ const Lab5 = ({generatedArr, setGeneratedArr}) => {
 
     const [result, setResult] = useState(null)
     const [secondArray, setSecondArray] = useState(null)
+    const [backupData, setBackupData] = useState([])
 
     const sortData = (data) => {
         return [...data].sort((a, b) => {
@@ -458,6 +459,7 @@ const Lab5 = ({generatedArr, setGeneratedArr}) => {
         const groupMiddles = []
         for(let i = 0; i < frequencies.length; i++){
             let middle = 0
+            frequencies[i] = formArrRow(i, frequencies[i])
             for(let j = 0; j < frequencies[i].length; j++){
                 if(frequencies[i][j]){
                     middle += frequencies[i][j] * tableData.yMiddles[j]
@@ -467,7 +469,6 @@ const Lab5 = ({generatedArr, setGeneratedArr}) => {
         }
         const rows = []
         tableData.xIntervals.forEach((interval, id) => {
-            frequencies[id] = formArrRow(id, frequencies[id])
             for(let j = 0; j < frequencies[id].length; j++){
                 if(frequencies[id][j]){
                     yValues[j] += frequencies[id][j]
@@ -494,6 +495,7 @@ const Lab5 = ({generatedArr, setGeneratedArr}) => {
             types: ['advancedTable'],
             data: tableData
         }
+        setBackupData(data)
         setResult(data)
     }
 
@@ -605,12 +607,31 @@ t0.95, 98 = 1.99
         const z = Math.round((0.5 * Math.log((1 + koef) / (1 - koef))) * 100) / 100
         const mLeft = Math.round((z - 1.96/Math.sqrt(98)) * 100) / 100
         const mRight = Math.round((z + 1.96/Math.sqrt(98)) * 100) / 100
+        const pLeft = Math.round((Math.tanh(mLeft)) * 100) / 100
+        const pRight = Math.round((Math.tanh(mRight)) * 100) / 100
+        const Sx = Math.round((Math.sqrt(S2x)) * 100) / 100
+        const Sy = Math.round((Math.sqrt(S2y)) * 100) / 100
+        const byxLeft = Math.round((byx - 1.99 * Sy * Math.sqrt(1 - koef ** 2) / (Sx * Math.sqrt(98))) * 100) / 100
+        const byxRight = Math.round((byx + 1.99 * Sy * Math.sqrt(1 - koef ** 2) / (Sx * Math.sqrt(98))) * 100) / 100
+        const bxyLeft = Math.round((bxy - 1.99 * Sx * Math.sqrt(1 - koef ** 2) / (Sy * Math.sqrt(98))) * 100) / 100
+        const bxyRight = Math.round((bxy + 1.99 * Sx * Math.sqrt(1 - koef ** 2) / (Sy * Math.sqrt(98))) * 100) / 100
         const answer = `Знайдемо інтервальні оцінки
 z = 0.5 * ln((1 + ${koef}) / (1 - ${koef})) = ${z}
 
 При Ф(t1-α) = 0.95
 t0.05 = 1.96
 ${mLeft} <= M(z) <= ${mRight}
+
+Границі довірчого інтервалу для р
+${pLeft} <= p <= ${pRight}
+
+Довірчий інтервал для генеральних коефіцієнтів регресії byx і bxy:
+
+Sx = ${Sx}
+Sy = ${Sy}
+
+${byxLeft} <= byx <= ${byxRight}
+${bxyLeft} <= bxy <= ${bxyRight}
 `
         const data = {
             types: ['string'],
@@ -620,7 +641,53 @@ ${mLeft} <= M(z) <= ${mRight}
     }
 
     const task15 = () => {
+        const lastTableData = {
+            xi: backupData.data.rows.map(el => el.middle),
+            ni: backupData.data.rows.map(el => el.sum),
+            yi: backupData.data.rows.map(el => el.groupMiddles),
+        }
+        lastTableData.delta1 = lastTableData.yi.map((el, id) => {
+            return Math.round(((el - Ymid) ** 2 * lastTableData.ni[id]) * 100) / 100
+        })
+        lastTableData.yxi = lastTableData.xi.map((el, id) => {
+            return  Math.round((byx * el + deltaY) * 100) / 100
+        })
+        lastTableData.delta2 = lastTableData.yxi.map((el, id) => {
+            return  Math.round(((el - Ymid) ** 2 * lastTableData.ni[id]) * 100) / 100
+        })
+        const sumDelta1 = lastTableData.delta1.reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+        );
+        const sumDelta2 = lastTableData.delta2.reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+        );
+        const sigma = Math.round((sumDelta1 / 100) * 100) / 100
+        const nyx = Math.round((Math.sqrt(sigma/S2y)) * 100) / 100
+        const sigma2 = Math.round((sumDelta2 / 100) * 100) / 100
+        const ryx = Math.round((Math.sqrt(sigma2/S2y)) * 100) / 100
+        const answer = `
+σ^2 = ${sigma}
+η = ${nyx}
 
+Значення μ близьке до значення r = ${koef}. Тому припущення про лінійний зв'язок є обгрунтованим
+
+R = ${ryx}
+
+Бачимо, що R = r (розбіжності викликані правилами округлення при обчисленнях).
+Величина коефіцієнта детермінації: R^2 = ${Math.round((ryx ** 2) * 100) / 100}
+
+Для перевірки значущості η знайдемо F
+F = ${Math.round((nyx ** 2 * 98 / ((1 - nyx ** 2) * 4)) * 100) / 100}
+
+Так як F > F 0.05; 1; 98 = 3.94, то індекс кореляції є значущим
+`
+        const data = {
+            types: ['string'],
+            data: answer
+        }
+        setResult(data)
     }
 
     const task16 = () => {
@@ -697,11 +764,7 @@ ${mLeft} <= M(z) <= ${mRight}
             {
                 text: 'Обчислити кореляційне відношення і індекс кореляції і перевірити їх значущість на рівні α 0 05.',
                 func: task15
-            },
-            {
-                text: 'Зробити висновки',
-                func: task16
-            },
+            }
         ]
     }
     return (
